@@ -69,18 +69,18 @@ def fix_version(version):
     return version
 
 def main():
-    print "%s v%s\n" % (scriptname, version)
+    print("%s v%s\n" % (scriptname, version))
 
     if len(sys.argv) == 2:
         if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-            print "Usage: %s [kernel-version]" % scriptname
+            print("Usage: %s [kernel-version]" % scriptname)
             sys.exit(0)
         else:
             kernel_version_string = sys.argv[1]
-            print "[*] Given kernel version: %s" % kernel_version_string
+            print("[*] Given kernel version: %s" % kernel_version_string)
     else:
         kernel_version_string = os.popen('uname -r').read().strip()
-        print "[*] Automatically detected local kernel version: %s" % kernel_version_string
+        print("[*] Automatically detected local kernel version: %s" % kernel_version_string)
 
     kernel_parts = kernel_version_string.split("-")
     kernel_version = fix_version(kernel_parts[0])
@@ -122,9 +122,9 @@ def main():
                  "ipc - half-nelson": { "CVE": "2010-4073", "versions": ("2.6.0-2.6.37rc1",), "exploits": (17787,) },
                }
 
-    print "[+] Possible exploits:"
+    print("[+] Possible exploits:")
 
-    for name, data in exploits.items():
+    for name, data in list(exploits.items()):
         versions = data["versions"] 
 
         for version_tree in versions:
@@ -145,17 +145,17 @@ def main():
                     else:
                         exploits_str += "        %s" % expl 
 
-                print """
+                print("""
 [*] Linux Kernel %s Local Root Exploit
     CVE: CVE-%s\n    Affects kernels: %s-%s
-    Exploits:\n%s""" % (name, cve, min_version, max_version, exploits_str)
+    Exploits:\n%s""" % (name, cve, min_version, max_version, exploits_str))
 
     if found_exploit:
-        print
+        print()
 
         if len(kernel_parts) > 1:
-            print "WARNING: %s appears to be a modified version of kernel %s." % (kernel_version_string, kernel_version)
-            print "These exploits can *possibly* get you to uid=0, but this script does *not* consider patched or backported kernel version\n"
+            print("WARNING: %s appears to be a modified version of kernel %s." % (kernel_version_string, kernel_version))
+            print("These exploits can *possibly* get you to uid=0, but this script does *not* consider patched or backported kernel version\n")
 
 if __name__ == "__main__":
     main()
